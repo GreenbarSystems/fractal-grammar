@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS launchd plist for fg-sync daemon.
+  Install:
+    cp contrib/fg-sync.plist ~/Library/LaunchAgents/com.fractalgrammar.fg-sync.plist
+    launchctl load ~/Library/LaunchAgents/com.fractalgrammar.fg-sync.plist
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.fractalgrammar.fg-sync.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.fractalgrammar.fg-sync</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>~/.fg-sync/venv/bin/fg-sync run</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>~/.fg-sync/logs/fg-sync.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>~/.fg-sync/logs/fg-sync.err</string>
+
+    <key>WorkingDirectory</key>
+    <string>~/.fg-sync</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+</dict>
+</plist>

@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fg-sync"
+version = "0.1.0"
+description = "Fractal Grammar ↔ Ollama integration CLI sidecar — persistent behavioral memory for local LLMs"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+authors = [
+    { name = "Ryan Moore", email = "ryandmoore1976@gmail.com" }
+]
+keywords = ["ollama", "local-llm", "fractal-grammar", "hdc", "behavioral-memory", "ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "click>=8.1",
+    "httpx>=0.27",
+    "uvicorn>=0.30",
+    "starlette>=0.37",
+    "tomli>=2.0; python_version < '3.11'",
+    "apscheduler>=3.10",
+    "numpy>=1.26",
+    "rich>=13.7",
+    "aiofiles>=23.2",
+]
+
+[project.optional-dependencies]
+pipeline = [
+    "scikit-learn>=1.4",
+    "hdbscan>=0.8.33",
+    "datasketch>=1.6",
+    "sentence-transformers>=3.0",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",
+    "respx>=0.21",
+]
+
+[project.scripts]
+fg-sync = "fg_sync.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ryandmoore1976/fractal-grammar"
+Issues = "https://github.com/ryandmoore1976/fractal-grammar/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["fg_sync*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

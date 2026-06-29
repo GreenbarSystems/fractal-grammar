@@ -1,0 +1,120 @@
+# fg-sync.toml — configuration for fg-sync
+# Copy to ~/.fg-sync/fg-sync.toml or pass via: fg-sync --config /path/to/fg-sync.toml
+# Full documentation: https://github.com/ryandmoore1976/fractal-grammar
+
+# ---------------------------------------------------------------------------
+# [proxy] — HTTP interceptor settings
+# ---------------------------------------------------------------------------
+[proxy]
+
+# Port fg-proxy listens on. Point your Ollama client here instead of 11434.
+listen_port = 11435
+
+# Port your Ollama instance is running on (default Ollama port).
+ollama_port = 11434
+
+# Ollama host (almost always 127.0.0.1 for local installs)
+ollama_host = "127.0.0.1"
+
+# Path where raw conversation captures are written (JSONL, one record per exchange)
+capture_path = "~/.fg-sync/capture.jsonl"
+
+
+# ---------------------------------------------------------------------------
+# [pipeline] — fractal-grammar extraction settings
+# ---------------------------------------------------------------------------
+[pipeline]
+
+# Cron schedule for automatic pipeline runs (UTC).
+# Default: 2am nightly. Use `fg-sync sync` for manual one-shot runs.
+# Format: "min hour dom month dow"
+schedule = "0 2 * * *"
+
+# Minimum number of user message events before the pipeline runs.
+# Set lower (e.g. 10) for testing, higher (100+) for production.
+min_events_to_run = 50
+
+# MinHash novelty gate — events with cosine similarity > this threshold
+# to an existing event are deduplicated and not re-processed.
+# Range: 0.0–1.0 (higher = more aggressive dedup)
+novelty_threshold = 0.92
+
+# HDC encoder dimensionality. Must match the value used when training
+# any persisted AssociativeMemory. Do not change after first sync.
+hdc_dimensions = 10000
+
+# HDC encoder random seed. 0xFEEDBEEF = 4277009102 decimal.
+# Controls deterministic hypervector generation.
+hdc_seed = 4277009102
+
+# HDBSCAN minimum cluster size. Smaller = more clusters, more specific rules.
+# Larger = fewer clusters, more general rules.
+min_cluster_size = 5
+
+# AssociativeMemory cosine threshold for pattern retrieval.
+# Tuned at 0.05 during stress testing — do not increase above 0.10.
+assoc_memory_threshold = 0.05
+
+# Use HDC backend for encoding (true) vs HashProjection fallback (false).
+# HDC is required for AssociativeMemory. HashProjection is faster but
+# does not support associative retrieval. Requires >= 300 events to be effective.
+use_hdc = true
+
+
+# ---------------------------------------------------------------------------
+# [ruleset] — behavioral ruleset output settings
+# ---------------------------------------------------------------------------
+[ruleset]
+
+# Where to write the generated behavioral ruleset JSON.
+output_path = "~/.fg-sync/ruleset.json"
+
+# Maximum number of behavioral rules to include in the ruleset.
+# Rules are ranked by weight (recency × cluster size) and truncated here.
+max_rules = 20
+
+# Maximum token budget for the injected system prompt prefix.
+# ~4 chars per token. 400 tokens ≈ 1,600 chars.
+# Increase for richer context; decrease to reduce prompt overhead.
+max_prompt_tokens = 400
+
+# Weight given to recency vs cluster size when ranking rules.
+# 1.0 = pure recency, 0.0 = pure cluster size popularity.
+recency_weight = 0.7
+
+# Days after which a behavioral pattern begins to decay in weight.
+# Patterns older than this are not removed, but ranked lower.
+decay_days = 30
+
+
+# ---------------------------------------------------------------------------
+# [metrics] — local performance metrics suite
+# ---------------------------------------------------------------------------
+[metrics]
+
+# Enable metrics collection (M1–M5).
+enabled = true
+
+# Path to metrics log (JSONL, one record per session).
+metrics_path = "~/.fg-sync/metrics.jsonl"
+
+# Number of pre-fg-sync sessions to use as baseline for comparison.
+baseline_session_count = 10
+
+
+# ---------------------------------------------------------------------------
+# [source] — conversation data source
+# ---------------------------------------------------------------------------
+[source]
+
+# "proxy"     — use fg-proxy HTTP interceptor (default, recommended)
+#               requires pointing your Ollama client at listen_port
+#
+# "openwebui" — read directly from Open WebUI's SQLite database
+#               no port change needed if you already run Open WebUI
+#               requires open-webui installed and webui.db path set below
+type = "proxy"
+
+# Only used when type = "openwebui":
+# openwebui_db = "~/.local/share/open-webui/webui.db"
+# Windows: openwebui_db = "%APPDATA%/open-webui/webui.db"

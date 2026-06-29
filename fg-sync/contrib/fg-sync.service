@@ -1,0 +1,26 @@
+# Linux systemd user service for fg-sync daemon.
+# Install:
+#   mkdir -p ~/.config/systemd/user
+#   cp contrib/fg-sync.service ~/.config/systemd/user/fg-sync.service
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now fg-sync
+# Status:
+#   systemctl --user status fg-sync
+#   journalctl --user -u fg-sync -f
+
+[Unit]
+Description=fg-sync — Fractal Grammar Ollama Integration Daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.fg-sync/venv/bin/fg-sync run
+Restart=on-failure
+RestartSec=10
+WorkingDirectory=%h/.fg-sync
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+
+[Install]
+WantedBy=default.target
