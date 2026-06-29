@@ -1,6 +1,6 @@
 \# fractal-grammar
 https://doi.org/10.5281/zenodo.21020196
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21020196.svg)](https://doi.org/10.5281/zenodo.21020196)
 
 \*\*Persistent behavioral memory for local LLMs. No cloud. No fine-tuning.\*\*
 
