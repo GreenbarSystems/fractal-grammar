@@ -1,0 +1,14 @@
+{
+  "enc_l0_us": 15.29,
+  "enc_l1_us": 48.72,
+  "dec_l0_us": 14.83,
+  "dec_l1_us": 50.04,
+  "gate_us": 151.47,
+  "pipeline_us": 225.45,
+  "py_enc_us": 193.68,
+  "target_us": 50.0,
+  "pass": false,
+  "speedup": 3.03,
+  "b0_bytes": 280,
+  "b1_bytes": 580
+}

@@ -1,0 +1,27 @@
+[package]
+name = "fg_gate"
+version = "0.4.0"
+edition = "2021"
+description = "FBG v0.4.0 binary encoding — Rust/PyO3 extension (VLQ indices + RLE session_count)"
+authors = ["Greenbars Systems"]
+license = "Apache-2.0"
+
+[lib]
+name = "fg_gate"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+pyo3 = { version = "0.24", features = ["extension-module"] }
+
+[dev-dependencies]
+# no extra test deps needed — all tests use std
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = "symbols"
+
+[profile.dev]
+opt-level = 0
+debug = true

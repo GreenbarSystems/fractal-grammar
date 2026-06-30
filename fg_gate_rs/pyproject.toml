@@ -1,0 +1,19 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "fg_gate"
+version = "0.4.0"
+description = "FBG v0.4.0 binary encoding — VLQ indices + RLE session_count, batch encode/decode for rules and ephemeral gate"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+module-name = "fg_gate._fg_gate"
+python-source = "python"
